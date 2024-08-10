@@ -1,0 +1,59 @@
+extends ../../layouts/default.pug
+
+block main
+    h1(class="mb-4") Trang thùng rác
+
+    .card.mb-3
+      .card-header Danh sách
+      
+      .card-body
+        table.table.table-hover.table-sm
+          thead
+            tr
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Giá
+              th Vị trí
+              th Trạng thái
+              th Hành động
+
+          tbody
+            if(products.length > 0)
+              each item, index in products
+                tr 
+                  td #{index+1}
+                  td
+                      img(
+                      src=item.thumbnail
+                      alt=item.title
+                      width="80px"
+                      height="auto"
+                      )
+                  td #{item.title}
+                  td #{item.price}$
+                  
+                  td #{item.position}
+                  td
+                      if(item.status == "active")
+                          button(
+                              class="badge badge-success"
+                          ) Hoạt động
+                      else
+                          button(
+                              class="badge badge-danger"
+                          ) Dừng hoạt động
+                  
+                  td
+                    button(
+                      class="btn btn-info btn-sm"
+                      button-restore=`/${prefixAdmin}/trash/restore/${item.id}`
+                    ) Khôi phục
+                    
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-permanent=`/${prefixAdmin}/trash/delete/${item.id}`
+                    ) Xóa vĩnh viễn
+            else
+              tr
+                td(colspan="6" class="text-center") Chưa có sản phẩm nào bị xoắ

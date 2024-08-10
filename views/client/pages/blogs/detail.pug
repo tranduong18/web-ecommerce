@@ -1,0 +1,20 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .product-detail
+    .container.my-5
+      .row
+        .col-6
+          .inner-thumb
+            img(src=blog.thumbnail, alt=blog.title)
+        .col-6
+          h1(class="inner-title") #{blog.title}
+
+          if (blog.category)
+            div(class="inner-category")
+              span Danh mục: 
+              a(href=`/blogs/${blog.category.slug}`) #{blog.category.title}
+
+          if (blog.description)
+            div(class="inner-desc") !{blog.description}

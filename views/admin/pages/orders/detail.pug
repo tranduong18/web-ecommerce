@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Chi tiết đơn hàng
+  
+  if (order.userInfo)
+    div(class="mb-4") Họ tên: <b>#{order.userInfo.fullName}</b>
+    div(class="mb-4") Số điện thoại: <b>#{order.userInfo.phone}</b>
+    div(class="mb-4") Địa chỉ: <b>#{order.userInfo.address}</b>
+
+  if (order.payment_method)
+    div(class="mb-4") Phương thức thanh toán: <b>#{order.payment_method}</b>
+
+  if (order.is_payment == "false")
+    div(class="mb-4") Tình trạng: <b>Chưa thanh toán</b>
+  else
+    div(class="mb-4") Tình trạng: <b>Đã thanh toán</b>
+
+  if (order.status)
+    div(class="mb-4") Trạng thái: <b> #{order.status} </b>
+      
+  if(order.totalPrice)
+    div(class="mb-4") Tổng tiền: <b> #{order.totalPrice}$ </b>
+
+  h5(class="mb-4") Thông tin sản phẩm
+  if(order.products)
+    each item in order.products
+      div(class="mb-4") Tên sản phẩm: <b>#{item.title}</b>
+      div(class="mb-4") Số lượng: <b>#{item.quantity}</b>
