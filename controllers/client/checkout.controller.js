@@ -8,6 +8,7 @@ const moment = require('moment');
 
 // [GET] /checkout/
 module.exports.index = async (req, res) => {
+    // Cart
     const cartId = req.cookies.cartId;
 
     const cart = await Cart.findOne({
@@ -28,10 +29,14 @@ module.exports.index = async (req, res) => {
         }        
     }
     cart.totalPrice = parseFloat(cart.totalPrice.toFixed(2))
+    // End Cart
+
+    const user = res.locals.user;
     
     res.render("client/pages/checkout/index", {
         pageTitle: "Đặt hàng",
-        cartDetail: cart
+        cartDetail: cart,
+        user: user
       });
 }
 

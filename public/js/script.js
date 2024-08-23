@@ -63,3 +63,72 @@ if(passField){
     })
 }
 // End Toggle Password
+
+// Icon add to Cart 
+const listIconAddtoCart = document.querySelectorAll("[add-to-cart]");
+if (listIconAddtoCart.length > 0) {
+    listIconAddtoCart.forEach(icon => {
+        icon.addEventListener("click", () => {
+            const link = icon.getAttribute("link");
+            fetch(link, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                })
+        });
+    });
+}
+// End Icon add to Cart 
+
+// Add to Wishlist 
+const listIconAddtoWishlist = document.querySelectorAll("[add-to-wishlist]");
+if (listIconAddtoWishlist.length > 0) {
+    listIconAddtoWishlist.forEach(icon => {
+        icon.addEventListener("click", () => {
+            const link = icon.getAttribute("link");
+            fetch(link, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                })
+        });
+    });
+}
+// End Add to Wishlist
+
+// Delete to Wishlist 
+const listIconDeletetoWishlist = document.querySelectorAll("[delete-to-wishlist]");
+if (listIconDeletetoWishlist.length > 0) {
+    listIconDeletetoWishlist.forEach(icon => {
+        icon.addEventListener("click", () => {
+            const link = icon.getAttribute("link");
+            fetch(link, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                })
+        });
+    });
+}
+// End Delete to Wishlist

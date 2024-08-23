@@ -2,59 +2,128 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main
-  .container.my-3
-    .row
-      .col-12
-        +box-head("Giỏ hàng")
+  //- .container.my-3
+  //-   .row
+  //-     .col-12
+  //-       +box-head("Giỏ hàng")
 
-    .row
+  //-   .row
+  //-     .col-12
+  //-       table(class="table table-bordered" cart)
+  //-         thead
+  //-           tr
+  //-             th STT
+  //-             th Ảnh
+  //-             th Tên
+  //-             th Giá
+  //-             th Số lượng
+  //-             th Tổng tiền
+  //-             th Hành động
+  //-         tbody
+  //-           if(cartDetail.products.length > 0)
+  //-             each product, index in cartDetail.products
+  //-               tr
+  //-                 td #{index + 1}
+  //-                 td
+  //-                   img(
+  //-                     src=product.productInfo.thumbnail
+  //-                     alt=product.productInfo.title
+  //-                     width="80px"
+  //-                   )
+  //-                 td
+  //-                   a(
+  //-                     href=`/products/detail/${product.productInfo.slug}`
+  //-                   ) #{product.productInfo.title}
+  //-                 td #{product.productInfo.priceNew}$
+  //-                 td
+  //-                   input(
+  //-                     type="number"
+  //-                     name="quantity"
+  //-                     value=product.quantity
+  //-                     min="1"
+  //-                     product-id=product.productId
+  //-                     style="width: 60px"
+  //-                   )
+  //-                 td #{product.totalPrice}$
+  //-                 td
+  //-                   a(
+  //-                     href=`/cart/delete/${product.productId}`
+  //-                     class="btn btn-danger"
+  //-                   ) Xóa
+  //-           else
+  //-             p Chưa có sản phẩm nào trong giỏ hàng.
+
+  //-       if(cartDetail.products.length > 0)
+  //-         h3(class="text-right") Tổng đơn hàng: #{cartDetail.totalPrice}$
+
+  //-         div(class="text-right mt-3")
+  //-           a(href="/checkout" class="btn btn-success") TIẾN HÀNH ĐẶT HÀNG
+
+  // Breadcrumb Start
+  .container-fluid
+    .row.px-xl-5
       .col-12
-        table(class="table table-bordered" cart)
-          thead
+        nav.breadcrumb.bg-light.mb-30
+          a.breadcrumb-item.text-dark(href='/') Trang chủ
+          span.breadcrumb-item.active Giỏ hàng
+  // Breadcrumb End
+  // Cart Start
+  .container-fluid
+    .row.px-xl-5
+      .col-lg-8.table-responsive.mb-5
+        table.table.table-light.table-borderless.table-hover.text-center.mb-0(cart)
+          thead.thead-dark
             tr
-              th STT
               th Ảnh
               th Tên
               th Giá
               th Số lượng
               th Tổng tiền
               th Hành động
-          tbody
-            if(cartDetail.products.length > 0)
-              each product, index in cartDetail.products
-                tr
-                  td #{index + 1}
-                  td
-                    img(
-                      src=product.productInfo.thumbnail
-                      alt=product.productInfo.title
-                      width="80px"
-                    )
-                  td
-                    a(
-                      href=`/products/detail/${product.productInfo.slug}`
+
+          tbody.align-middle
+            each product, index in cartDetail.products
+              tr
+                td.align-middle
+                  img(src=product.productInfo.thumbnail alt=product.productInfo.title width="80px")
+                td.align-middle
+                  a(
+                      href=`/products/detail/${product.productInfo.slug}`, style="color: #000"
                     ) #{product.productInfo.title}
-                  td #{product.productInfo.priceNew}$
-                  td
-                    input(
-                      type="number"
-                      name="quantity"
-                      value=product.quantity
-                      min="1"
-                      product-id=product.productId
-                      style="width: 60px"
-                    )
-                  td #{product.totalPrice}$
-                  td
-                    a(
-                      href=`/cart/delete/${product.productId}`
-                      class="btn btn-danger"
-                    ) Xóa
-            else
-              p Chưa có sản phẩm nào trong giỏ hàng.
+                td.align-middle #{product.productInfo.priceNew}$
+                td.align-middle
+                  .input-group.quantity.mx-auto(style='width: 50px;')
+                    input.form-control(type='number' value=product.quantity min="1" max=product.stock name="quantity" product-id=product.productId)
+                td.align-middle #{product.totalPrice}$
+                td.align-middle
+                  a(
+                    href=`/cart/delete/${product.productId}`
+                    class="btn btn-danger"
+                  ) Xóa
+              
+      .col-lg-4
+        form.mb-30(action='')
+          .input-group
+            input.form-control.border-0.p-4(type='text' placeholder='Coupon Code')
+            .input-group-append
+              button.btn.btn-primary Apply Coupon
+        h5.section-title.position-relative.text-uppercase.mb-3
+          span.bg-secondary.pr-3 Đơn hàng
+        .bg-light.p-30.mb-5
+          .border-bottom.pb-2
+            .d-flex.justify-content-between.mb-3
+              h6 Subtotal
+              h6 #{cartDetail.totalPrice}$
+            .d-flex.justify-content-between
+              h6.font-weight-medium Shipping
+              h6.font-weight-medium $10
+          .pt-2
+            .d-flex.justify-content-between.mt-2
+              h5 Total
+              h5 #{cartDetail.totalPrice}$
+            a(href="/checkout").btn.btn-block.btn-primary.font-weight-bold.my-3.py-3 Tiến hành thanh toán
+  // Cart End
 
-        if(cartDetail.products.length > 0)
-          h3(class="text-right") Tổng đơn hàng: #{cartDetail.totalPrice}$
 
-          div(class="text-right mt-3")
-            a(href="/checkout" class="btn btn-success") TIẾN HÀNH ĐẶT HÀNG
+
+  

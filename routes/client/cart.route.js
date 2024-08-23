@@ -6,6 +6,8 @@ router.get("/", controller.index);
 
 router.post("/add/:productId", controller.addPost);
 
+router.post("/addIcon/:productId", controller.addIconPost);
+
 router.get("/delete/:productId", controller.delete);
 
 router.get("/update/:productId/:quantity", controller.update);

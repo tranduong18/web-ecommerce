@@ -13,7 +13,6 @@ module.exports.index = async(req, res) => {
     for(const item of products){
         item.priceNew = ((1 - item.discountPercentage/100) * item.price).toFixed(0);
     }
-    // console.log(products);
 
     res.render("client/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
@@ -47,8 +46,6 @@ module.exports.category = async(req, res) => {
     }
 
     await getSubCategory(category.id);
-    // console.log(allSubCategory);
-
 
     const products = await Product.find({
         product_category_id: {
@@ -83,10 +80,18 @@ module.exports.detail = async (req, res) => {
 
     product.priceNew = ((1 - product.discountPercentage/100) * product.price).toFixed(0);
 
+    const similarProduct = await Product.find({
+        _id: {$ne: product.id},
+        product_category_id: product.product_category_id,
+        status: "active",
+        deleted: false
+    });
+
     if(product){
         res.render("client/pages/products/detail", {
             pageTitle: "Chi tiết sản phẩm",
-            product: product
+            product: product,
+            similarProduct: similarProduct
         });
     }
     else{

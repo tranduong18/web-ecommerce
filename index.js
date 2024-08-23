@@ -6,8 +6,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const path = require('path');
-const http = require('http');
-const { Server } = require("socket.io");
 
 const database = require("./config/database");
 database.connect();
@@ -18,13 +16,6 @@ const systemConfig = require('./config/system');
 
 const app = express();
 const port = process.env.port;
-
-// SocketIO
-const server = http.createServer(app);
-const io = new Server(server);
-
-global._io = io;
-// End SocketIO
 
 app.use(methodOverride('_method'));
 
@@ -60,7 +51,7 @@ app.get("*", (req, res) => {
     });
 });
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });
 

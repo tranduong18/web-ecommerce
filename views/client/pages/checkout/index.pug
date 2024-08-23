@@ -2,6 +2,14 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main
+  // Tiêu đề
+  .container-fluid
+    .row.px-xl-5
+      .col-12
+        nav.breadcrumb.bg-light.mb-30
+          a.breadcrumb-item.text-dark(href='/') Trang chủ
+          span.breadcrumb-item.active Thanh toán
+  // hết Tiêu đề
   .container.my-3
     .row
       .col-12

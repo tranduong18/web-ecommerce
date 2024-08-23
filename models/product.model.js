@@ -20,6 +20,11 @@ const productSchema = new mongoose.Schema({
         default: false
     },
     deletedBy: String,
+    isLoved: [
+        {
+          userId: String
+        }
+    ],
     slug:{
         type: String,
         slug: "title",
