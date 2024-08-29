@@ -43,6 +43,7 @@
   }
   
   .box-head .inner-title {
+    text-align: center;
     margin-bottom: 0;
     font-size: 28px;
     font-weight: 600;
@@ -223,16 +224,33 @@
 }
 /* End product-detail */
 
-.eye-icon {
-  font-size: 0.85rem; 
-  padding: 0;
-  margin: 0;
+
+/* Show password */
+.form-group.position-relative {
+  margin-bottom: 1.5rem; 
 }
 
-.showPass:hover,
-.showPass:focus {
-  background-color: transparent !important; 
-  color: #6c757d !important; 
-  box-shadow: none; 
+.eye-icon {
+  position: absolute;
+  right: 10px; 
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem; 
+  color: #6c757d; 
+  cursor: pointer; 
+  transition: color 0.3s ease; 
+  margin-top: 15px;
+}
+
+.eye-icon:hover {
+  color: #007bff; 
+}
+
+a.forgotPass{
+  font-weight: 500;
+  color: green;
 }
 /* End Show password */
+
+
+

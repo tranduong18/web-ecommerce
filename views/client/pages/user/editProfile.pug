@@ -2,11 +2,11 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main
-  .container.my-3
-    .row
-      .col-8.mx-auto
+  .container.my-5
+    .row.justify-content-center
+      .col-md-6.col-lg-5
         +box-head(pageTitle)
-
+        
         form(
           action="/user/profile/edit?_method=PATCH"
           method="POST"

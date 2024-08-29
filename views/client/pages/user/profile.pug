@@ -2,9 +2,9 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main
-  .container.my-3
-    .row
-      .col-12
+  .container.my-5
+    .row.justify-content-center
+      .col-md-6.col-lg-5
         +box-head("Thông tin tài khoản")
 
         if (user.avatar)
