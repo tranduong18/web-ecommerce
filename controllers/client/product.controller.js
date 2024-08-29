@@ -1,24 +1,41 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
 
+const paginationHelper = require("../../helpers/pagination.helper");
+
 // [GET] /products/
-module.exports.index = async(req, res) => {
-    const products = await Product.find({
+module.exports.index = async (req, res) => {
+    const find = {
         status: "active",
         deleted: false
-    }).sort({
-        position: "desc"
-    });
+    };
 
-    for(const item of products){
-        item.priceNew = ((1 - item.discountPercentage/100) * item.price).toFixed(0);
+    // Truy vấn tất cả sản phẩm phù hợp với điều kiện ban đầu
+    let allProducts = await Product.find(find).sort({ position: "desc" });
+
+    // Tính toán và lọc theo `priceNew`
+    if (req.query.priceStart && req.query.priceEnd) {
+        const priceStart = Number(req.query.priceStart);
+        const priceEnd = Number(req.query.priceEnd);
+
+        allProducts = allProducts.filter(product => {
+            return product.priceNew >= priceStart && product.priceNew <= priceEnd;
+        });
     }
 
+    // Sử dụng module phân trang của bạn
+    const pagination = await paginationHelper.productClient(req, allProducts);
+
+    // Phân trang sau khi đã lọc
+    const paginatedProducts = allProducts.slice(pagination.skip, pagination.skip + pagination.limitItems);
+
+    // Render kết quả
     res.render("client/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
-        products: products
+        products: paginatedProducts,
+        pagination: pagination
     });
-}
+};
 
 // [GET] /products/:slugCategory
 module.exports.category = async(req, res) => {

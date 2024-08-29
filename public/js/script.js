@@ -132,3 +132,37 @@ if (listIconDeletetoWishlist.length > 0) {
     });
 }
 // End Delete to Wishlist
+
+// Pagination
+const listButtonPagination = document.querySelectorAll("[button-pagination]");
+if (listButtonPagination.length > 0) {
+    let url = new URL(window.location.href);
+
+    listButtonPagination.forEach(button => {
+        button.addEventListener("click", () => {
+            const page = button.getAttribute("button-pagination");
+            url.searchParams.set("page", page);
+            window.location.href = url.href;
+        });
+    });
+}
+// End Pagination
+
+// Lọc sản phẩm theo giá
+const listFilterByPrice = document.querySelectorAll("[filter-price]");
+if(listFilterByPrice.length > 0){
+    let url = new URL(window.location.href);
+
+    listFilterByPrice.forEach(price => {
+        price.addEventListener("click", () => {
+            const [priceStart, priceEnd] = price.getAttribute("filter-price").split('-');
+            if(priceStart && priceEnd){
+                url.searchParams.set("priceStart", priceStart);
+                url.searchParams.set("priceEnd", priceEnd);
+
+                window.location.href = url.href;
+            }
+        });
+    });
+}
+// Hết Lọc sản phẩm theo giá

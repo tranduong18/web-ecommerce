@@ -31,7 +31,13 @@ const productSchema = new mongoose.Schema({
         unique: true
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true }, 
+    toObject: { virtuals: true }
+});
+
+productSchema.virtual('priceNew').get(function() {
+    return (1 - this.discountPercentage / 100) * this.price;
 });
 
 const Product = mongoose.model("Product", productSchema, "products");

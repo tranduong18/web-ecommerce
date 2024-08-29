@@ -24,6 +24,25 @@ module.exports.product = async (req, find) => {
     return pagination;
 }
 
+module.exports.productClient = async (req, products) => {
+    const pagination = {
+        currentPage: 1,
+        limitItems: 6
+    };
+
+    if(req.query.page){
+        pagination.currentPage = parseInt(req.query.page);
+    }
+
+    pagination.skip = (pagination.currentPage - 1) * pagination.limitItems;
+
+    const totalItems = products.length;
+    const totalPage = Math.ceil(totalItems / pagination.limitItems);
+    pagination.totalPage = totalPage;
+
+    return pagination;
+};
+
 module.exports.productCategory = async (req, find) => {
     const pagination = {
         currentPage: 1,
