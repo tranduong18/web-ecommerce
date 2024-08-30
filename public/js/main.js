@@ -102,3 +102,20 @@
     
 })(jQuery);
 
+document.querySelectorAll('.dropdown-toggle.sub-menu').forEach(toggle => {
+    toggle.addEventListener('click', function(event) {
+      event.stopPropagation(); 
+      event.preventDefault(); 
+      const dropdown = this.closest('.nav-item').querySelector('.dropdown-menu');
+      const isOpen = dropdown.classList.contains('show');
+      
+      // Close any open submenus
+      document.querySelectorAll('.dropdown-menu.show').forEach(menu => menu.classList.remove('show'));
+      
+      if (!isOpen) {
+        dropdown.classList.add('show');
+      }
+    });
+  });
+  
+

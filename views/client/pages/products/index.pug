@@ -3,24 +3,6 @@ include ../../mixins/box-head.pug
 include ../../mixins/pagination.pug
 
 block main
-  //- .container.my-3
-  //-   .row
-  //-     .col-12
-  //-       +box-head(pageTitle)
-
-  //-   .row
-  //-     each item in products
-  //-       .col-4.mb-3
-  //-         .product-item
-  //-           .inner-image
-  //-             img(src=item.thumbnail, alt=item.title)
-  //-           .inner-content
-  //-             h3.inner-title
-  //-               a(href=`/products/detail/${item.slug}`) #{item.title}
-  //-             .inner-price-new #{item.priceNew}$
-  //-             .inner-price-old #{item.price}$
-  //-             .inner-discount #{item.discountPercentage}%
-
   // Đường dẫn 
   .container-fluid
     .row.px-xl-5
@@ -28,7 +10,8 @@ block main
         nav.breadcrumb.bg-light.mb-30
           a.breadcrumb-item.text-dark(href='/') Trang chủ
           a.breadcrumb-item.text-dark(href='/products') Sản phẩm
-          
+          if(slug)
+            a.breadcrumb-item.text-dark(href=`/products/${slug}`) #{title}
   // Hết Đường dẫn
 
   // Shop Start
@@ -64,64 +47,30 @@ block main
               label(for='500-600' filter-price = "500-600" style="color: #6C757D; cursor: pointer") $500 - $600
 
         // Price End
-        // Color Start
-        h5.section-title.position-relative.text-uppercase.mb-3
-          span.bg-secondary.pr-3 Filter by color
-        .bg-light.p-4.mb-30
-          form
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#color-all.custom-control-input(type='checkbox' checked='')
-              label.custom-control-label(for='price-all') All Color
-              span.badge.border.font-weight-normal 1000
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#color-1.custom-control-input(type='checkbox')
-              label.custom-control-label(for='color-1') Black
-              span.badge.border.font-weight-normal 150
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#color-2.custom-control-input(type='checkbox')
-              label.custom-control-label(for='color-2') White
-              span.badge.border.font-weight-normal 295
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#color-3.custom-control-input(type='checkbox')
-              label.custom-control-label(for='color-3') Red
-              span.badge.border.font-weight-normal 246
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#color-4.custom-control-input(type='checkbox')
-              label.custom-control-label(for='color-4') Blue
-              span.badge.border.font-weight-normal 145
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between
-              input#color-5.custom-control-input(type='checkbox')
-              label.custom-control-label(for='color-5') Green
-              span.badge.border.font-weight-normal 168
-        // Color End
+        
         // Size Start
         h5.section-title.position-relative.text-uppercase.mb-3
-          span.bg-secondary.pr-3 Filter by size
+          span.bg-secondary.pr-3 Lọc theo size
         .bg-light.p-4.mb-30
           form
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#size-all.custom-control-input(type='checkbox' checked='')
-              label.custom-control-label(for='size-all') All Size
+              a(href="/products")
+                label(for='size-all' style="color: red; cursor: pointer") Tất cả
               span.badge.border.font-weight-normal 1000
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#size-1.custom-control-input(type='checkbox')
-              label.custom-control-label(for='size-1') XS
+              label(for='size-1' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) XS
               span.badge.border.font-weight-normal 150
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#size-2.custom-control-input(type='checkbox')
-              label.custom-control-label(for='size-2') S
+              label(for='size-2' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) S
               span.badge.border.font-weight-normal 295
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#size-3.custom-control-input(type='checkbox')
-              label.custom-control-label(for='size-3') M
+              label(for='size-3' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) M
               span.badge.border.font-weight-normal 246
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              input#size-4.custom-control-input(type='checkbox')
-              label.custom-control-label(for='size-4') L
+              label(for='size-4' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) L
               span.badge.border.font-weight-normal 145
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between
-              input#size-5.custom-control-input(type='checkbox')
-              label.custom-control-label(for='size-5') XL
+              label(for='size-5' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) XL
               span.badge.border.font-weight-normal 168
         // Size End
       // Shop Sidebar End

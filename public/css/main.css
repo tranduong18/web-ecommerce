@@ -9743,3 +9743,8 @@
   .place-success{
     position: relative
   }
+
+  i.fa.fa-angle-right.float-right.mt-1 {
+    color: grey;
+    margin-right: 30px;
+  }

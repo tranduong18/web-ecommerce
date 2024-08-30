@@ -44,7 +44,6 @@ if(listInputQuantity){
 
 // Toggle Password
 const passInput = document.querySelector("#passwordInput");
-console.log(passInput);
 if(passInput){
     const buttonTogglePass = document.querySelector("#togglePassword");
     const eyeIcon = buttonTogglePass.querySelector("[icon]");
@@ -148,6 +147,27 @@ if (listButtonPagination.length > 0) {
     });
 }
 // End Pagination
+
+// Navbar
+const listButtonNavbar = document.querySelectorAll("[navbar]");
+if (listButtonNavbar) {
+    const url = new URL(window.location.href);
+    const currentPath = url.pathname;
+
+    listButtonNavbar.forEach(button => {
+        if(button.getAttribute('href') === currentPath) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', function() {
+            listButtonNavbar.forEach(btn => btn.classList.remove('active'));
+            
+            button.classList.add('active');
+        });
+    });
+}
+
+// End Navbar
 
 // Lọc sản phẩm theo giá
 const listFilterByPrice = document.querySelectorAll("[filter-price]");

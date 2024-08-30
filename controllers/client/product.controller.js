@@ -10,10 +10,9 @@ module.exports.index = async (req, res) => {
         deleted: false
     };
 
-    // Truy vấn tất cả sản phẩm phù hợp với điều kiện ban đầu
     let allProducts = await Product.find(find).sort({ position: "desc" });
 
-    // Tính toán và lọc theo `priceNew`
+    // Lọc theo giá
     if (req.query.priceStart && req.query.priceEnd) {
         const priceStart = Number(req.query.priceStart);
         const priceEnd = Number(req.query.priceEnd);
@@ -23,13 +22,11 @@ module.exports.index = async (req, res) => {
         });
     }
 
-    // Sử dụng module phân trang của bạn
+    // Phân trang
     const pagination = await paginationHelper.productClient(req, allProducts);
 
-    // Phân trang sau khi đã lọc
     const paginatedProducts = allProducts.slice(pagination.skip, pagination.skip + pagination.limitItems);
 
-    // Render kết quả
     res.render("client/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
         products: paginatedProducts,
@@ -64,7 +61,7 @@ module.exports.category = async(req, res) => {
 
     await getSubCategory(category.id);
 
-    const products = await Product.find({
+    let products = await Product.find({
         product_category_id: {
             $in: [
                 category.id,
@@ -79,9 +76,26 @@ module.exports.category = async(req, res) => {
         item.priceNew = ((1 - item.discountPercentage/100) * item.price).toFixed(0);
     }
 
+    // Lọc sản phẩm theo giá
+    if (req.query.priceStart && req.query.priceEnd) {
+        const priceStart = Number(req.query.priceStart);
+        const priceEnd = Number(req.query.priceEnd);
+
+        products = products.filter(product => {
+            return product.priceNew >= priceStart && product.priceNew <= priceEnd;
+        });
+    }
+
+    const pagination = await paginationHelper.productClient(req, products);
+
+    const paginatedProducts = products.slice(pagination.skip, pagination.skip + pagination.limitItems);
+
     res.render("client/pages/products/index", {
         pageTitle: category.title,
-        products: products
+        products: products,
+        pagination: pagination,
+        slug: slugCategory,
+        title: category.title
     });
 }
 
