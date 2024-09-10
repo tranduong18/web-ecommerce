@@ -11,24 +11,33 @@ module.exports.index = async (req, res) => {
     // Cart
     const cartId = req.cookies.cartId;
 
-    const cart = await Cart.findOne({
-        _id: cartId
-    });
+    const cart = await Cart.findOne({ _id: cartId });
 
     cart.totalPrice = 0;
 
-    if(cart.products.length > 0){
-        for(const product of cart.products){
+    if (cart.products.length > 0) {
+        for (const product of cart.products) {
             const productInfo = await Product.findOne({
                 _id: product.productId
             }).select("title thumbnail slug price discountPercentage");
-            productInfo.priceNew = (1 - productInfo.discountPercentage/100) * productInfo.price
+            
+            productInfo.priceNew = (1 - productInfo.discountPercentage / 100) * productInfo.price;
+            
+            product.totalPrice = 0;
+            product.totalQuantity = 0;
+            for (const size of product.size) {
+                size.totalPrice = productInfo.priceNew * size.quantity;
+                product.totalPrice += size.totalPrice;
+                product.totalQuantity += size.quantity;
+            }
+
+            cart.totalPrice += product.totalPrice;
+
             product.productInfo = productInfo;
-            product.totalPrice = productInfo.priceNew * product.quantity;
-            cart.totalPrice += (product.totalPrice);
-        }        
+        }
     }
-    cart.totalPrice = parseFloat(cart.totalPrice.toFixed(2))
+
+    cart.totalPrice = parseFloat(cart.totalPrice.toFixed(2));
     // End Cart
 
     const user = res.locals.user;
@@ -59,21 +68,28 @@ module.exports.orderPost = async (req, res) => {
         _id: cartId
     });
 
+    let totalPrice = 0;
+
     for(const item of cart.products){
         const productInfo = await Product.findOne({
             _id: item.productId
-        });
+        }).select("title thumbnail slug price discountPercentage");
 
+        item.totalQuantity = 0;
+
+        for (const size of item.size) {
+            item.totalQuantity += size.quantity;
+        }
+    
         orderData.products.push({
             productId: item.productId,
             price: productInfo.price,
             discountPercentage: productInfo.discountPercentage,
-            quantity: item.quantity
+            quantity: item.totalQuantity
         });
     }
 
-    let totalPrice = 0;
-
+    
     for(const item of orderData.products){
         item.priceNew = (1 - item.discountPercentage/100) * item.price;
         item.totalPrice = item.priceNew * item.quantity;

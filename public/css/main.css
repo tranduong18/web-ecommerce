@@ -9748,3 +9748,7 @@
     color: grey;
     margin-right: 30px;
   }
+
+  label[filter-price].active{
+    color: red !important
+  }

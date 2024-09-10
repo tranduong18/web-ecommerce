@@ -1,62 +1,8 @@
 include ../mixins/sub-menu.pug
 
 header
-  //- .container
-  //-   .row.align-items-center
-  //-     .col-3
-  //-       .inner-logo
-  //-         a(href="/")
-  //-           img(src=setting.logo, alt="Logo")
-
-  //-     .col-5
-  //-       form(
-  //-         action="/search"
-  //-         method="GET"
-  //-       ) 
-  //-         div(class="form-group d-flex mb-0")
-  //-           input(
-  //-             type="text"
-  //-             placeholder="Nhập từ khóa..."
-  //-             class="form-control"
-  //-             name="keyword"
-  //-             value=keyword
-  //-           )
-  //-           button(
-  //-             type="submit"
-  //-             class="btn btn-primary"
-  //-           ) Tìm
-
-  //-     .col-4
-  //-       .inner-menu
-  //-         ul
-  //-           li
-  //-             a(href="/") Trang chủ
-  //-           li(class="sub-menu")
-  //-             a(href="/products") Sản phẩm
-  //-             if(layoutCategoryProducts)
-  //-               +sub-menu(layoutCategoryProducts)
-  //-           li
-  //-             a(href="/blogs") Blog
-  //-           li
-  //-             a(href="/cart") Giỏ hàng (#{cartTotal})
-            
-  //-           if(user)
-  //-             li
-  //-               a(href="/user/profile") #{user.fullName}
-  //-             li
-  //-               a(href="/chat") Chat
-  //-             li
-  //-               a(href="/user/logout") Đăng xuất
-  //-           else
-  //-             li
-  //-               a(href="/user/login") Đăng nhập
-  //-             li
-  //-               a(href="/user/register") Đăng ký
-
   // Topbar Start
   .container-fluid
-    //- .row.bg-secondary.py-1.px-xl-5
-
     .row.align-items-center.bg-light.py-3.px-xl-5.d-none.d-lg-flex
       .col-lg-4
         a.text-decoration-none(href='/')
@@ -122,7 +68,7 @@ header
           
               a.nav-item.nav-link(href='/cart' navbar) Giỏ hàng
               a.nav-item.nav-link(href='/checkout' navbar) Thanh toán
-              a.nav-item.nav-link(href='/contact' navbar) Liên lạc
+              a.nav-item.nav-link(href='/contact' navbar) Liên hệ
             .navbar-nav.ml-auto.py-0.d-none.d-lg-block
               if(user)
                 a.btn.px-0(href='/wishlist')

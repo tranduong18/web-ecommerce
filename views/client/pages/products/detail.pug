@@ -100,43 +100,27 @@ block main
             strong.text-dark.mr-3 Sizes:
             form
               .custom-control.custom-radio.custom-control-inline
-                input#size-1.custom-control-input(type='radio' name='size')
+                input#size-1.custom-control-input(type='radio' name='size-radio' value="xs" required)
                 label.custom-control-label(for='size-1') XS
               .custom-control.custom-radio.custom-control-inline
-                input#size-2.custom-control-input(type='radio' name='size')
+                input#size-2.custom-control-input(type='radio' name='size-radio' value="s" required)
                 label.custom-control-label(for='size-2') S
               .custom-control.custom-radio.custom-control-inline
-                input#size-3.custom-control-input(type='radio' name='size')
+                input#size-3.custom-control-input(type='radio' name='size-radio' value="m" required)
                 label.custom-control-label(for='size-3') M
               .custom-control.custom-radio.custom-control-inline
-                input#size-4.custom-control-input(type='radio' name='size')
+                input#size-4.custom-control-input(type='radio' name='size-radio' value="l" required)
                 label.custom-control-label(for='size-4') L
               .custom-control.custom-radio.custom-control-inline
-                input#size-5.custom-control-input(type='radio' name='size')
+                input#size-5.custom-control-input(type='radio' name='size-radio' value="xl" required)
                 label.custom-control-label(for='size-5') XL
-          .d-flex.mb-4
-            strong.text-dark.mr-3 Colors:
-            form
-              .custom-control.custom-radio.custom-control-inline
-                input#color-1.custom-control-input(type='radio' name='color')
-                label.custom-control-label(for='color-1') Black
-              .custom-control.custom-radio.custom-control-inline
-                input#color-2.custom-control-input(type='radio' name='color')
-                label.custom-control-label(for='color-2') White
-              .custom-control.custom-radio.custom-control-inline
-                input#color-3.custom-control-input(type='radio' name='color')
-                label.custom-control-label(for='color-3') Red
-              .custom-control.custom-radio.custom-control-inline
-                input#color-4.custom-control-input(type='radio' name='color')
-                label.custom-control-label(for='color-4') Blue
-              .custom-control.custom-radio.custom-control-inline
-                input#color-5.custom-control-input(type='radio' name='color')
-                label.custom-control-label(for='color-5') Green
+
           .d-flex.align-items-center.mb-4.pt-2
               form.d-flex(
                 action=`/cart/add/${product.id}`
                 method="POST"
               )
+                input#hidden-size(type="hidden" name="size" value="")
                 .input-group.quantity.mr-3(style='width: 50px;')
                   input.form-control(type='number' value='1' min="1" max=product.stock name="quantity")
                 button(type="submit").btn.btn-primary.px-3

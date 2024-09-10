@@ -59,6 +59,57 @@ block main
           rows="5"
           textarea-mce
         )
+      
+      // Size
+      div(class="form-group")
+        label Size:
+        div(class="form-check form-check-inline" style="margin-left: 10px")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeXS"
+            name="size[]"
+            value="xs"
+          )
+          label(for="sizeXS" class="form-check-label") XS
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeS"
+            name="size[]"
+            value="s"
+          )
+          label(for="sizeS" class="form-check-label") S
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeM"
+            name="size[]"
+            value="m"
+          )
+          label(for="sizeM" class="form-check-label") M
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeL"
+            name="size[]"
+            value="l"
+          )
+          label(for="sizeL" class="form-check-label") L
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeXL"
+            name="size[]"
+            value="xl"
+          )
+          label(for="sizeXL" class="form-check-label") XL
+      // End Size
+
       div(class="form-group")
         label(for="price") Giá
         input(

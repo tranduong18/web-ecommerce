@@ -33,14 +33,32 @@ if(listInputQuantity){
         input.addEventListener("change", () => {
             const productId = input.getAttribute("product-id");
             const quantity = parseInt(input.value);
+            const sizeName = input.getAttribute("data-size-name");
             
             if(productId && quantity > 0){
-                window.location.href = `/cart/update/${productId}/${quantity}`;
+                window.location.href = `/cart/update/${productId}/${quantity}/${sizeName}`;
             }
         });
     });
 }
 // Hết Cập nhật số lượng sản phẩm trong giỏ hàng
+
+// Cập nhật size sản phẩm trong giỏ hàng
+const selectSize = document.querySelectorAll("[cart] select[name='size']");
+if(selectSize){
+    selectSize.forEach(option => {
+        option.addEventListener("change", () => {
+            const productId = option.getAttribute("product-id");
+            const sizeName = option.getAttribute("data-size-name");
+            const sizeChange = option.value;
+
+            if(productId && sizeName && sizeChange){
+                window.location.href = `/cart/update/${productId}/size/${sizeName}/${sizeChange}`;
+            }
+        });
+    });
+}
+// Hết Cập nhật size sản phẩm trong giỏ hàng
 
 // Toggle Password
 const passInput = document.querySelector("#passwordInput");
@@ -171,19 +189,42 @@ if (listButtonNavbar) {
 
 // Lọc sản phẩm theo giá
 const listFilterByPrice = document.querySelectorAll("[filter-price]");
-if(listFilterByPrice.length > 0){
+if (listFilterByPrice.length > 0) {
     let url = new URL(window.location.href);
-
     listFilterByPrice.forEach(price => {
         price.addEventListener("click", () => {
             const [priceStart, priceEnd] = price.getAttribute("filter-price").split('-');
-            if(priceStart && priceEnd){
+            if (priceStart && priceEnd) {
+                listFilterByPrice.forEach(item => item.classList.remove("active"));
+                price.classList.add("active");
                 url.searchParams.set("priceStart", priceStart);
                 url.searchParams.set("priceEnd", priceEnd);
-
                 window.location.href = url.href;
             }
         });
     });
+
+    const currentPriceStart = url.searchParams.get("priceStart");
+    const currentPriceEnd = url.searchParams.get("priceEnd");
+
+    listFilterByPrice.forEach(price => {
+        const [priceStart, priceEnd] = price.getAttribute("filter-price").split('-');
+        if (currentPriceStart === priceStart && currentPriceEnd === priceEnd) {
+            price.classList.add("active");
+        }
+    });
 }
 // Hết Lọc sản phẩm theo giá
+
+// Xử lý size của sản phẩm
+const sizeRadios = document.querySelectorAll('input[name="size-radio"]');
+if(sizeRadios.length > 0){
+    const hiddenSizeInput = document.querySelector('#hidden-size');
+
+    sizeRadios.forEach(size => {
+        size.addEventListener('change', function() {
+            hiddenSizeInput.value = this.value;
+        });
+    });
+}
+// Hết Xử lý size của sản phẩm
