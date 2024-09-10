@@ -15,7 +15,7 @@ const routeClient = require("./routes/client/index.route");
 const systemConfig = require('./config/system');
 
 const app = express();
-const port = process.env.port;
+const port = process.env.port || 3000;
 
 app.use(methodOverride('_method'));
 
@@ -51,7 +51,7 @@ app.get("*", (req, res) => {
     });
 });
 
-app.listen(port,() => {
+app.listen(port, "0.0.0.0",() => {
     console.log(`App listening on port ${port}`);
 });
 
