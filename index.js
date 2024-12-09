@@ -15,7 +15,7 @@ const routeClient = require("./routes/client/index.route");
 const systemConfig = require('./config/system');
 
 const app = express();
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(methodOverride('_method'));
 
@@ -37,7 +37,7 @@ app.set("view engine", "pug");
 //tiny mce
 app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
@@ -54,4 +54,3 @@ app.get("*", (req, res) => {
 app.listen(port, "0.0.0.0",() => {
     console.log(`App listening on port ${port}`);
 });
-
