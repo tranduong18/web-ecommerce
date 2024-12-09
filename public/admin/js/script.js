@@ -219,18 +219,32 @@ if(showAlert){
 
 // Upload Image
 const uploadImage = document.querySelector("[upload-image]");
-if(uploadImage){
+if (uploadImage) {
     const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
-    const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+    const imagePreviewContainer = uploadImage.querySelector(".image-preview-container");
 
     uploadImageInput.addEventListener("change", () => {
-        const file = uploadImageInput.files[0];
-        console.log(file);
-        if(file){
-            uploadImagePreview.src = URL.createObjectURL(file);
+        const files = uploadImageInput.files;
+        if (files) {
+            imagePreviewContainer.innerHTML = ''; // Xóa toàn bộ ảnh cũ khi chọn ảnh mới
+
+            for (const file of files) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('image-preview');
+                    img.style.marginRight = '10px';
+                    imagePreviewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
         }
     });
 }
+
 // End Upload Image
 
 // Sort
@@ -420,7 +434,6 @@ if(orderStatusElements.length > 0){
 
 // Toggle Password
 const passInput = document.querySelector("#passwordInput");
-console.log(passInput);
 if(passInput){
     const buttonTogglePass = document.querySelector("#togglePassword");
     const eyeIcon = buttonTogglePass.querySelector("[icon]");

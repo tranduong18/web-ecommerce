@@ -216,6 +216,60 @@ if (listFilterByPrice.length > 0) {
 }
 // Hết Lọc sản phẩm theo giá
 
+// Lọc sản phẩm theo size
+const listFilterBySize = document.querySelectorAll("[filter-size]");
+if (listFilterBySize.length > 0) {
+    let url = new URL(window.location.href);
+    listFilterBySize.forEach(Size => {
+        Size.addEventListener("click", () => {
+            const size = Size.getAttribute("filter-size");
+            if(size) {
+                listFilterBySize.forEach(item => item.classList.remove("active"));
+                Size.classList.add("active");
+                url.searchParams.set("size", size);
+                window.location.href = url.href;
+            }
+        });
+    });
+
+    const currentSize = url.searchParams.get("size");
+
+    listFilterBySize.forEach(Size => {
+        const size = Size.getAttribute("filter-size");
+        if (currentSize === size) {
+            Size.classList.add("active");
+        }
+    });
+}
+// Hết Lọc sản phẩm theo size
+
+// Lọc sản phẩm theo danh mục
+const listFilterByCategory = document.querySelectorAll("[filter-categories]");
+if (listFilterByCategory.length > 0) {
+    let url = new URL(window.location.href);
+    listFilterByCategory.forEach(Category => {
+        Category.addEventListener("click", () => {
+            const category = Category.getAttribute("filter-categories");
+            if(category) {
+                listFilterByCategory.forEach(item => item.classList.remove("active"));
+                Category.classList.add("active");
+                url.searchParams.set("category", category);
+                window.location.href = url.href;
+            }
+        });
+    });
+
+    const currentCategory = url.searchParams.get("category");
+
+    listFilterByCategory.forEach(Category => {
+        const category = Category.getAttribute("filter-categories");
+        if (currentCategory === category) {
+            Category.classList.add("active");
+        }
+    });
+}
+// Hết Lọc sản phẩm theo danh mục
+
 // Xử lý size của sản phẩm
 const sizeRadios = document.querySelectorAll('input[name="size-radio"]');
 if(sizeRadios.length > 0){
@@ -228,3 +282,101 @@ if(sizeRadios.length > 0){
     });
 }
 // Hết Xử lý size của sản phẩm
+
+// detail-product-images
+const productImages = document.querySelector(".product-detail-images");
+if(productImages){
+    const swiper = new Swiper(".product-detail-images", {
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        },
+    });
+}
+// End detail-product-images
+
+// Review
+document.addEventListener('DOMContentLoaded', function() {
+    const reviewButtons = document.querySelectorAll('[data-toggle="modal"]');
+
+    if (reviewButtons.length > 0) {
+        reviewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                const orderId = this.getAttribute('data-order-id');
+                const rating = this.getAttribute('data-rating');
+                const review = this.getAttribute('data-review');
+
+                const productIdInput = document.getElementById('getProductId');
+                const orderIdInput = document.getElementById('getOrderId');
+                const ratingSelect = document.querySelector('select[name="rating"]');
+                const reviewTextarea = document.querySelector('textarea[name="review"]');
+
+                if(productIdInput && orderIdInput) {
+                    productIdInput.value = productId;
+                    orderIdInput.value = orderId;
+                }
+
+                if(ratingSelect && rating) {
+                    ratingSelect.value = rating; 
+                }
+                if(reviewTextarea && review) {
+                    reviewTextarea.value = review; 
+                }
+            });
+        });
+    }
+});
+// End Review
+
+const formDiscount = document.querySelector("[apply-discount]");
+if(formDiscount){
+    $(document).ready(function() {
+        $(formDiscount).on('submit', function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                method: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    if(response.discount && response.cart) {
+                        $('#discountAmount').text(response.discount.amountDiscount.toLocaleString() + ' ₫');
+                        $('#totalPrice').text(response.cart.totalPrice.toLocaleString() + ' ₫');
+
+                        const newTotalPrice = response.cart.totalPrice; 
+                        $('a[href="/checkout"]').attr('href', `/checkout?totalPrice=${newTotalPrice}`);
+                    } else if(response.errorDiscount){
+                        alert(response.errorDiscount);
+                    }
+                    else{
+                        console.log('Phản hồi không hợp lệ:', response);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+}
+
+// Sidebar dashboard
+const listLinkSidebar = document.querySelectorAll("[sidebar]");
+if (listLinkSidebar) {
+    const url = new URL(window.location.href);
+    const currentPath = url.pathname;
+
+    listLinkSidebar.forEach(link => {
+        if(link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+
+        link.addEventListener('click', function() {
+            listButtonNavbar.forEach(btn => btn.classList.remove('active'));
+            
+            link.classList.add('active');
+        });
+    });
+}
+// End Sidebar dashboard

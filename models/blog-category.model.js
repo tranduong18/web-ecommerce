@@ -21,7 +21,7 @@ const blogCategorySchema = new mongoose.Schema({
       unique: true
     }
   }, {
-    timestamps: true // Tự động thêm trường createdAt và updatedAt (https://mongoosejs.com/docs/timestamps.html)
+    timestamps: true
   });
   
   const BlogCategory = mongoose.model("BlogCategory", blogCategorySchema, "blogs-category");
