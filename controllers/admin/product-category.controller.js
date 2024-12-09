@@ -61,7 +61,6 @@ module.exports.index = async (req, res) => {
     .skip(pagination.skip)
     .sort(sort);
 
-    // console.log(records);
     for(const item of records){
       // Người tạo
       if(item.createdBy){
@@ -87,6 +86,14 @@ module.exports.index = async (req, res) => {
       }
   
       item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+      
+      if(item.parent_id){
+        const parentItem = await ProductCategory.findOne({
+          _id: item.parent_id
+        });
+
+        item.title = item.title + ` (${parentItem.title})`;
+      }
     }
 
     res.render("admin/pages/products-category/index", {

@@ -1,5 +1,6 @@
 const Cart = require("../../models/cart.model");
 const Product = require("../../models/product.model");
+const Discount = require("../../models/discount.model");
 
 // [GET] /cart
 module.exports.index = async (req, res) => {
@@ -241,4 +242,59 @@ module.exports.updateSize = async (req, res) => {
     })
 
     res.redirect("back");
+}
+
+// [POST] /cart/apply-discount
+module.exports.applyDiscount = async (req, res) => {
+    const discountCode = req.body.discountCode;
+
+    const discount = await Discount.findOne({
+        name: discountCode,
+        deleted: false,
+        status: "active"
+    });
+
+    if(!discount){
+        return res.json({
+            errorDiscount: "Không đúng mã giảm giá!!!"
+        })
+    }
+
+    const cartId = req.cookies.cartId;
+
+    const cart = await Cart.findOne({ _id: cartId });
+
+    cart.totalPrice = 0;
+
+    if (cart.products.length > 0) {
+        for (const product of cart.products) {
+            const productInfo = await Product.findOne({
+                _id: product.productId
+            }).select("title thumbnail slug price discountPercentage");
+            
+            productInfo.priceNew = (1 - productInfo.discountPercentage / 100) * productInfo.price;
+            product.totalPrice = 0;
+
+            for (const size of product.size) {
+                size.totalPrice = productInfo.priceNew * size.quantity;
+                product.totalPrice += size.totalPrice;
+            }
+
+            cart.totalPrice += product.totalPrice;
+
+            product.productInfo = productInfo;
+        }
+    }
+
+    discount.amountDiscount = cart.totalPrice * (discount.amount / 100);
+    cart.totalPrice -= discount.amountDiscount;
+
+    res.json({
+        discount: {
+            amountDiscount: discount.amountDiscount
+        },
+        cart: {
+            totalPrice: cart.totalPrice
+        }
+    });
 }

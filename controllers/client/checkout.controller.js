@@ -6,12 +6,16 @@ const crypto = require('crypto');
 const querystring = require('qs');
 const moment = require('moment');
 
+const sendEmailHelper = require("../../helpers/sendEmail.helper");
+
 // [GET] /checkout/
 module.exports.index = async (req, res) => {
     // Cart
     const cartId = req.cookies.cartId;
 
-    const cart = await Cart.findOne({ _id: cartId });
+    const cart = await Cart.findOne({ 
+        _id: cartId 
+    });
 
     cart.totalPrice = 0;
 
@@ -37,7 +41,13 @@ module.exports.index = async (req, res) => {
         }
     }
 
-    cart.totalPrice = parseFloat(cart.totalPrice.toFixed(2));
+    if(req.query.totalPrice){
+        cart.totalPrice = Number(req.query.totalPrice);
+    }
+    else{
+        cart.totalPrice = parseFloat(cart.totalPrice.toFixed(2));
+    }
+    
     // End Cart
 
     const user = res.locals.user;
@@ -55,20 +65,19 @@ module.exports.orderPost = async (req, res) => {
     const userInfo = {
         fullName: req.body.fullName,
         phone: req.body.phone,
-        address: req.body.address
+        address: req.body.address,
     };
 
     const orderData = {
         userInfo: userInfo,
         products: [],
-        payment_method: req.body.payment_method
+        payment_method: req.body.payment_method,
+        totalPrice: Number(req.body.totalPrice)
     };
 
     const cart = await Cart.findOne({
         _id: cartId
     });
-
-    let totalPrice = 0;
 
     for(const item of cart.products){
         const productInfo = await Product.findOne({
@@ -89,14 +98,7 @@ module.exports.orderPost = async (req, res) => {
         });
     }
 
-    
-    for(const item of orderData.products){
-        item.priceNew = (1 - item.discountPercentage/100) * item.price;
-        item.totalPrice = item.priceNew * item.quantity;
-        totalPrice += item.totalPrice;
-    }
-    
-    orderData.totalPrice = totalPrice;
+    orderData.userId = res.locals.user.id;
 
     const order = new Order(orderData);
     await order.save();
@@ -123,8 +125,6 @@ module.exports.success = async (req, res) => {
         _id: orderId
     }); 
 
-    let totalPrice = 0;
-
     for(const item of order.products){
         const productInfo = await Product.findOne({
             _id: item.productId
@@ -134,7 +134,6 @@ module.exports.success = async (req, res) => {
         item.title = productInfo.title;
         item.priceNew = (1 - item.discountPercentage/100) * item.price;
         item.totalPrice = item.priceNew * item.quantity;
-        totalPrice += item.totalPrice;
 
         await Product.updateOne({
             _id: item.productId
@@ -143,7 +142,7 @@ module.exports.success = async (req, res) => {
         });
     }
 
-    totalPrice = parseFloat(totalPrice.toFixed(2));
+    totalPrice = order.totalPrice;
 
     if(order.payment_method == "vnpay"){
         await Order.updateOne({
@@ -156,15 +155,57 @@ module.exports.success = async (req, res) => {
     await Order.updateOne({
         _id: orderId
     }, {
-        status: "Đang xử lý",
-        totalPrice: totalPrice,
+        status: "Đang xử lý"
     });
+
+    const subject = "Thông tin đơn hàng đã đặt thành công";
+    const htmlSendMail = `
+  <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+    <h2 style="color: #333;">Thông tin đơn hàng đã đặt thành công</h2>
+    <p>Xin chào,</p>
+    <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Dưới đây là thông tin về đơn hàng của bạn:</p>
+    
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Hình ảnh</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Sản phẩm</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Giá</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Số lượng</th>
+          <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Tổng giá</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${order.products.map(item => `
+          <tr>
+            <td style="border: 1px solid #ddd; padding: 8px;">
+              <img src="${item.thumbnail[0]}" alt="${item.title}" style="width: 80px; height: 80px;">
+            </td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${item.title}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${item.priceNew.toLocaleString()} ₫</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${item.quantity}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">${item.totalPrice.toLocaleString()} ₫</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 20px;">Tổng giá trị đơn hàng: ${totalPrice.toLocaleString()} ₫</h3>
+
+    <p>Cảm ơn bạn đã mua sắm với chúng tôi!</p>
+    <p>Trân trọng,</p>
+    <p>Đội ngũ hỗ trợ khách hàng.</p>
+  </div>
+`;
+
+    const email = res.locals.user.email;
+    sendEmailHelper.sendEmail(email, subject, htmlSendMail);
 
     res.render("client/pages/checkout/success", {
         pageTitle: "Đặt hàng thành công",
         order: order,
         totalPrice: totalPrice
-      });
+    });
 }
 
 
@@ -184,8 +225,7 @@ module.exports.create_url_payment = async (req, res) => {
     let secretKey = vnp_HashSecret;
 
     const orderId = req.query.orderId;
-    let amount = parseFloat(req.query.amount);
-    
+    let amount = req.query.amount;
     
     const locale = 'vn';
     const currCode = 'VND';
@@ -198,7 +238,7 @@ module.exports.create_url_payment = async (req, res) => {
     vnp_Params['vnp_TxnRef'] = orderId;
     vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
     vnp_Params['vnp_OrderType'] = 'other';
-    vnp_Params['vnp_Amount'] = parseInt(amount * 100000) ;
+    vnp_Params['vnp_Amount'] = Number(amount) * 100;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_CreateDate'] = createDate;

@@ -14,7 +14,7 @@ module.exports.index = async(req, res) => {
     const pagination = await paginationHelper.order(req, find);
     // Hết Phân trang
 
-    const records = await Order.find(find).limit(pagination.limitItems).skip(pagination.skip);
+    const records = await Order.find(find).limit(pagination.limitItems).skip(pagination.skip).sort({_id: "desc"});;
 
     for(const item of records){
         item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss")
@@ -38,6 +38,15 @@ module.exports.changeStatus = async(req, res) => {
         }, {
             status: newStatus
         })
+
+        if(newStatus == "Giao thành công"){
+            console.log("Ok");
+            await Order.updateOne({
+                _id: id
+            }, {
+                is_payment: true
+            })
+        }
 
         req.flash("success", "Cập nhật trạng thái thành công!");
 
@@ -79,7 +88,8 @@ module.exports.detail = async(req, res) => {
             _id: item.productId
         });
 
-        item.title = product.title
+        item.title = product.title;
+        item.image = product.thumbnail[0];
     }
 
     res.render("admin/pages/orders/detail", {

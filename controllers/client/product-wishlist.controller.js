@@ -1,15 +1,22 @@
 const ProductWishlist = require("../../models/product-wishlist.model");
 const Product = require("../../models/product.model");
+const Review = require("../../models/product-review.model");
+
+const paginationHelper = require("../../helpers/pagination.helper");
+const ratingAverage = require("../../helpers/ratingAverage.helper");
 
 // [GET] /wishlist
 module.exports.index = async (req, res) => {
-    const userId = res.locals.user.id;
-    const wishlist = await ProductWishlist.findOne({
-        userId: userId
-    });
+    const find = {
+        userId: res.locals.user.id
+    }
 
-    if(wishlist.products.length > 0){
-        for(const item of wishlist.products){
+    const wishlist = await ProductWishlist.findOne(find);
+
+    let allProducts = wishlist.products;
+
+    if(allProducts.length > 0){
+        for(const item of allProducts){
             const productId = item.productId;
     
             const productInfo = await Product.findOne({
@@ -19,10 +26,26 @@ module.exports.index = async (req, res) => {
             item.productInfo = productInfo;
         }
     }
+
+    const pagination = await paginationHelper.productWishlist(req, allProducts);
+
+    const paginatedProducts = allProducts.slice(pagination.skip, pagination.skip + pagination.limitItems);
+
+    for(const item of paginatedProducts){
+        const reviewsItem = await Review.find({
+            productId: item.id
+        });
+
+        item.reviewsCount = reviewsItem.length;
+
+        item.ratingAvg = await ratingAverage.ratingAvg(reviewsItem);
+    }
     
     res.render("client/pages/products/wishlist", {
         pageTitle: "Yêu thích",
-        wishlist: wishlist
+        wishlist: wishlist,
+        products: paginatedProducts,
+        pagination: pagination,
     });
     
 }

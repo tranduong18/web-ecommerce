@@ -86,8 +86,9 @@ module.exports.index = async (req, res) => {
     }
 
     item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+  
+    item.image = item.thumbnail[0];
   }
-
 
   res.render("admin/pages/products/index", {
     pageTitle: "Quản lý sản phẩm",
@@ -307,6 +308,8 @@ module.exports.detail = async (req, res) => {
       _id: id,
       deleted: false
     });
+
+    product.image = product.thumbnail[0];
 
     if(product) {
       res.render("admin/pages/products/detail", {

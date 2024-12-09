@@ -1,97 +1,106 @@
-const Product = require("../../models/product.model");
-const Category = require("../../models/product-category.model");
-const Account = require("../../models/account.model");
 const User = require("../../models/user.model");
+const Order = require("../../models/order.model");
 
 // [GET] /admin/dashboard/
 module.exports.index = async (req, res) => {
+    const startOfDay = new Date(new Date().setHours(0, 0, 0, 0)); 
+    const endOfDay = new Date(new Date().setHours(23, 59, 59, 999)); 
+
     const statistic = {
-        categoryProduct: {
-            total: 0,
-            active: 0,
-            inactive: 0
+        orders: {
+            todayOrders: 0,
+            totalOrders: 0
         },
-        product: {
-            total: 0,
-            active: 0,
-            inactive: 0,
-          },
-          account: {
-            total: 0,
-            active: 0,
-            inactive: 0,
-          },
-          user: {
-            total: 0,
-            active: 0,
-            inactive: 0,
-          },
+        amounts: {
+            todayAmounts: 0,
+            totalAmounts: 0
+        },
+        customers:{
+            todayCustomer: 0,
+            totalCustomer: 0
+        }
     };
 
-    // categoryProduct
-    statistic.categoryProduct.total = await Category.countDocuments({
+    // orders
+    statistic.orders.todayOrders = await Order.countDocuments({
+        createdAt: {
+            $gte: startOfDay, 
+            $lte: endOfDay    
+        },
         deleted: false
     });
 
-    statistic.categoryProduct.active = await Category.countDocuments({
+    statistic.orders.totalOrders = await Order.countDocuments({
+        deleted: false
+    });
+
+    // End orders
+
+    // amounts
+    const orders = await Order.find({
+        is_payment: true,
+        deleted: false
+    });
+    
+    statistic.amounts.totalAmounts = orders.reduce((acc, order) => acc + order.totalPrice, 0);
+
+    const ordersToday = await Order.find({
+        is_payment: true,
+        deleted: false,
+        createdAt: {
+            $gte: startOfDay, 
+            $lte: endOfDay    
+        }
+    });
+
+    statistic.amounts.todayAmounts = ordersToday.reduce((acc, order) => acc + order.totalPrice, 0);
+    // End amounts
+
+    // customers
+    statistic.amounts.todayCustomer = await User.countDocuments({
+        createdAt: {
+            $gte: startOfDay, 
+            $lte: endOfDay    
+        },
         deleted: false,
         status: "active"
     });
 
-    statistic.categoryProduct.inactive = await Category.countDocuments({
-        deleted: false,
-        status: "inactive"
-    });
-    // End categoryProduct
-
-    // product
-    statistic.product.total = await Product.countDocuments({
-        deleted: false
-    });
-
-    statistic.product.active = await Product.countDocuments({
+    statistic.amounts.totalCustomer = await User.countDocuments({
         deleted: false,
         status: "active"
     });
+    // End customers
 
-    statistic.product.inactive = await Product.countDocuments({
-        deleted: false,
-        status: "inactive"
-    });
-    // End product
+    // Tính doanh thu hàng tháng
+    const monthlyRevenueData = await Order.aggregate([
+        {
+            $match: {
+                is_payment: true,
+                deleted: false,
+                createdAt: {
+                    $gte: new Date(new Date().getFullYear(), 0, 1), 
+                    $lte: new Date(new Date().getFullYear(), 11, 31) 
+                }
+            }
+        },
+        {
+            $group: {
+                _id: { $month: "$createdAt" }, 
+                totalRevenue: { $sum: "$totalPrice" } 
+            }
+        },
+        {
+            $sort: { _id: 1 } 
+        }
+    ]);
 
-    // account
-    statistic.account.total = await Account.countDocuments({
-        deleted: false
-    });
-
-    statistic.account.active = await Account.countDocuments({
-        deleted: false,
-        status: "active"
-    });
-
-    statistic.account.inactive = await Account.countDocuments({
-        deleted: false,
-        status: "inactive"
-    });
-    // End account
-
-    // user
-    statistic.user.total = await User.countDocuments({
-        deleted: false
-    });
-
-    statistic.user.active = await User.countDocuments({
-        deleted: false,
-        status: "active"
+    statistic.amounts.monthlyRevenue = new Array(12).fill(0); 
+    monthlyRevenueData.forEach(item => {
+        statistic.amounts.monthlyRevenue[item._id - 1] = item.totalRevenue; 
     });
 
-    statistic.user.inactive = await User.countDocuments({
-        deleted: false,
-        status: "inactive"
-    });
-    // End user
-
+    
     res.render("admin/pages/dashboard/index", {
         pageTitle: "Trang tổng quan",
         statistic: statistic
