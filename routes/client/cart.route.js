@@ -16,4 +16,6 @@ router.get("/update/:productId/:quantity/:sizeName", controller.update);
 
 router.get("/update/:productId/size/:sizeName/:sizeChange", controller.updateSize);
 
+router.post("/apply-discount", controller.applyDiscount);
+
 module.exports = router;

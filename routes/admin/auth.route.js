@@ -6,7 +6,7 @@ const validate = require("../../validates/admin/auth.validate");
 
 router.get("/login", controller.login);
 
-router.post("/login", validate.login, controller.loginPost);
+router.post("/login", validate.login,controller.loginPost);
 
 router.get("/logout", controller.logout);
 

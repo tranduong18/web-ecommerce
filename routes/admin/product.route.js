@@ -21,9 +21,9 @@ router.patch("/change-position/:id", controller.changePosition);
 router.get("/create", controller.create);
 
 router.post("/create", 
-    upload.single('thumbnail'),
+    upload.fields([{ name: 'thumbnail', maxCount: 7}]),
     validate.createPost,
-    uploadCloud.uploadSingle,
+    uploadCloud.uploadFields,
     controller.createPost
 );
 
@@ -31,9 +31,9 @@ router.get("/edit/:id", controller.edit);
 
 router.patch(
     "/edit/:id",
-    upload.single('thumbnail'),
+    upload.fields([{ name: 'thumbnail', maxCount: 7}]),
     validate.createPost,
-    uploadCloud.uploadSingle,
+    uploadCloud.uploadFields,
     controller.editPatch
 );
 

@@ -9,4 +9,6 @@ router.get("/:slugCategory", controller.category);
 
 router.get("/detail/:slug", controller.detail);
 
+router.post("/comment", controller.comment);
+
 module.exports = router;
