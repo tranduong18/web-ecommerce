@@ -3,7 +3,7 @@ include ../../mixins/pagination.pug
 
 block main
   if(role.permissions.includes("blogs_view"))
-    h1(class="mb-4") Trang bài viết
+    h1(class="mb-4") Quản lý bài viết
 
     .card.mb-3
       .card-header Danh sách
@@ -42,6 +42,7 @@ block main
                       alt=item.title
                       width="80px"
                       height="auto"
+                      style="aspect-ratio: 16/9; object-fit: cover;"
                     )
                   td #{item.title}
                   

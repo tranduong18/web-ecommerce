@@ -85,13 +85,13 @@ block main
                 td #{index+1}
                 td
                   img(
-                    src=item.thumbnail
+                    src=item.image
                     alt=item.title
                     width="80px"
                     height="auto"
                   )
                 td #{item.title}
-                td #{item.price}$
+                td #{item.price.toLocaleString()} ₫
                 if(role.permissions.includes("products_edit"))
                   td
                     input(

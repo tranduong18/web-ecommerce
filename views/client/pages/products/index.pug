@@ -10,8 +10,12 @@ block main
         nav.breadcrumb.bg-light.mb-30
           a.breadcrumb-item.text-dark(href='/') Trang chủ
           a.breadcrumb-item.text-dark(href='/products') Sản phẩm
+          if(parentCategoryTitle && parentCategoryTitle != "")
+            a.breadcrumb-item.text-dark(href=`/products/${parentCategorySlug}`) #{parentCategoryTitle}
           if(slug)
             a.breadcrumb-item.text-dark(href=`/products/${slug}`) #{title}
+          if(filterCategory && filterCategory != "")
+            a.breadcrumb-item.text-dark(href="") #{filterCategory}
   // Hết Đường dẫn
 
   // Shop Start
@@ -19,6 +23,23 @@ block main
     .row.px-xl-5
       // Shop Sidebar Start
       .col-lg-3.col-md-4
+        
+        if(!slug)
+          // Danh mục
+          h5.section-title.position-relative.text-uppercase.mb-3
+            span.bg-secondary.pr-3 Danh mục
+          .bg-light.p-4.mb-30
+            form
+              .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
+                a(href="/products")
+                  label(for='categories-all' style="color: red; cursor: pointer") Tất cả
+
+              if(!slug)
+                for category in categories
+                  .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
+                    label(for='' filter-categories = `${category.slug}` style="color: #6C757D; cursor: pointer" ) #{category.title}
+          // Hết Danh mục
+
         // Lọc giá tiền
         h5.section-title.position-relative.text-uppercase.mb-3
           span.bg-secondary.pr-3 Lọc theo giá
@@ -33,22 +54,16 @@ block main
                   label(for='price-all' style="color: red; cursor: pointer") Tất cả
               
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='0-100' filter-price = "0-100" style="color: #6C757D; cursor: pointer" ) $0 - $100
+              label(for='0-100' filter-price = "0-199000" style="color: #6C757D; cursor: pointer" ) Dưới 200.000
 
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='100-200' filter-price = "100-200" style="color: #6C757D ; cursor: pointer") $100 - $200
+              label(for='100-200' filter-price = "200000-500000" style="color: #6C757D ; cursor: pointer") 200.000 - 500.000
 
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='200-300' filter-price = "200-300" style="color: #6C757D; cursor: pointer") $200 - $300
+              label(for='200-300' filter-price = "500000-1000000" style="color: #6C757D; cursor: pointer") 500.000 - 1.000.000
 
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='300-400' filter-price = "300-400" style="color: #6C757D; cursor: pointer") $300 - $400
-
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='400-500' filter-price = "400-500" style="color: #6C757D; cursor: pointer") $400 - $500
-
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between
-              label(for='500-600' filter-price = "500-600" style="color: #6C757D; cursor: pointer") $500 - $600
+              label(for='300-400' filter-price = "1000000-10000000" style="color: #6C757D; cursor: pointer") Trên 1.000.000
         // Hết Lọc giá tiền
         
         // Size Start
@@ -57,24 +72,25 @@ block main
         .bg-light.p-4.mb-30
           form
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              a(href="/products")
-                label(for='size-all' style="color: red; cursor: pointer") Tất cả
-              span.badge.border.font-weight-normal 1000
+              if(!slug)
+                a(href="/products")
+                  label(for='size-all' style="color: red; cursor: pointer") Tất cả
+              else
+                a(href=`/products/${slug}`)
+                  label(for='size-all' style="color: red; cursor: pointer") Tất cả
+            
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='size-1' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) XS
-              span.badge.border.font-weight-normal 150
+              label(for='size-1' filter-size = "S" style="color: #6C757D; cursor: pointer" ) S
+              
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='size-2' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) S
-              span.badge.border.font-weight-normal 295
+              label(for='size-2' filter-size = "M" style="color: #6C757D; cursor: pointer" ) M
+              
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='size-3' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) M
-              span.badge.border.font-weight-normal 246
-            .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between.mb-3
-              label(for='size-4' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) L
-              span.badge.border.font-weight-normal 145
+              label(for='size-3' filter-size = "L" style="color: #6C757D; cursor: pointer" ) L
+              
             .custom-control.custom-checkbox.d-flex.align-items-center.justify-content-between
-              label(for='size-5' filter-size = "0-100" style="color: #6C757D; cursor: pointer" ) XL
-              span.badge.border.font-weight-normal 168
+              label(for='size-4' filter-size = "XL" style="color: #6C757D; cursor: pointer" ) XL
+
         // Size End
       // Shop Sidebar End
       // Shop Product Start
@@ -84,7 +100,7 @@ block main
             .col-lg-4.col-md-6.col-sm-6.pb-1
               .product-item.bg-light.mb-4
                 .product-img.position-relative.overflow-hidden
-                  img.img-fluid.w-100(src=item.thumbnail, alt=item.title)
+                  img.img-fluid.w-100(src=item.thumbnail[0], alt=item.title, style="aspect-ratio: 9/14; object-fit: cover;height=auto")
                   .product-action
                     a.btn.btn-outline-dark.btn-square(link=`/cart/addIcon/${item.id}` add-to-cart)
                       i.fa.fa-shopping-cart
@@ -100,18 +116,17 @@ block main
                 .text-center.py-4
                   a.h6.text-decoration-none.text-truncate(href=`/products/detail/${item.slug}`) #{item.title}
                   .d-flex.align-items-center.justify-content-center.mt-2
-                    h5(style="color: red") $#{item.priceNew}
-                    h6.text-muted.ml-2
-                      del(style="color: green") $#{item.price}
+                    h5(style="color: red") #{item.priceNew.toLocaleString().toLocaleString()} ₫
+                    if(item.discountPercentage != 0)
+                      h6.text-muted.ml-2
+                        del(style="color: green") #{item.price.toLocaleString()} ₫
                   .d-flex.align-items-center.justify-content-center.mb-1
-                    small.fa.fa-star.text-primary.mr-1
-                    small.fa.fa-star.text-primary.mr-1
-                    small.fa.fa-star.text-primary.mr-1
-                    small.fa.fa-star.text-primary.mr-1
-                    small.fa.fa-star.text-primary.mr-1
-                    small (99)
+                    each star in [1, 2, 3, 4, 5] 
+                      if (star <= item.ratingAvg)
+                        small.fas.fa-star.text-primary.mr-1
+                      else
+                        small.far.fa-star.text-primary.mr-1
+                    small (#{item.reviewsCount})
 
           .col-12
             +pagination(pagination)
-      // Shop Product End
-  // Shop End

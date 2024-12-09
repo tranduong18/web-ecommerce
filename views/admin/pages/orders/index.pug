@@ -31,7 +31,7 @@ block main
                 td #{item.userInfo.phone}
                 td #{item.userInfo.address}
                 td #{item.payment_method}
-                td #{item.totalPrice} $
+                td #{item.totalPrice.toLocaleString()} ₫
                 if(role.permissions.includes("orders_edit"))
                   td
                     select(
@@ -41,7 +41,6 @@ block main
                       orderStatus = `/${prefixAdmin}/orders/changeStatus/${item.id}`
                     )
                       option(value="Đang xử lý" selected=item.status === "Đang xử lý") Đang xử lý
-                      option(value="Chờ lấy hàng" selected=item.status === "Chờ lấy hàng") Chờ lấy hàng
                       option(value="Đang giao hàng" selected=item.status === "Đang giao hàng") Đang giao hàng
                       option(value="Giao thành công" selected=item.status === "Giao thành công") Giao thành công
                       option(value="Hoãn" selected=item.status === "Hoãn") Hoãn

@@ -29,7 +29,7 @@ header
         if(user)
           button.btn.btn-sm.btn-light.dropdown-toggle(type='button' data-toggle='dropdown') #{user.fullName}
           .dropdown-menu.dropdown-menu-right
-            a.dropdown-item(href="/user/profile") Thông tin cá nhân
+            a.dropdown-item(href="/user/dashboard") Thông tin cá nhân
             a.dropdown-item(href="/user/logout") Đăng xuất
 
         else
@@ -58,7 +58,6 @@ header
       .col-lg-9
         nav.navbar.navbar-expand-lg.bg-dark.navbar-dark.py-3.py-lg-0.px-0
           a.text-decoration-none.d-block.d-lg-none(href='/')
-            img(src=setting.logo, alt="Logo" style="width: 150px")
           button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarCollapse')
             span.navbar-toggler-icon
           #navbarCollapse.collapse.navbar-collapse.justify-content-between
@@ -68,7 +67,8 @@ header
           
               a.nav-item.nav-link(href='/cart' navbar) Giỏ hàng
               a.nav-item.nav-link(href='/checkout' navbar) Thanh toán
-              a.nav-item.nav-link(href='/contact' navbar) Liên hệ
+              a.nav-item.nav-link(href='/blogs' navbar) Bài viết
+              
             .navbar-nav.ml-auto.py-0.d-none.d-lg-block
               if(user)
                 a.btn.px-0(href='/wishlist')

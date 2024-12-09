@@ -12,43 +12,25 @@ block main
             li(data-target='#header-carousel' data-slide-to='1')
             li(data-target='#header-carousel' data-slide-to='2')
           .carousel-inner
-            .carousel-item.position-relative.active(style='height: 430px;')
-              img.position-absolute.w-100.h-100(src='images/carousel-1.jpg' style='object-fit: cover;')
-              .carousel-caption.d-flex.flex-column.align-items-center.justify-content-center
-                .p-3(style='max-width: 700px;')
-                  h1.display-4.text-white.mb-3.animate__animated.animate__fadeInDown Men Fashion
-                  p.mx-md-5.px-5.animate__animated.animate__bounceIn
-                    | Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam
-                  a.btn.btn-outline-light.py-2.px-4.mt-3.animate__animated.animate__fadeInUp(href='#') Shop Now
-            .carousel-item.position-relative(style='height: 430px;')
-              img.position-absolute.w-100.h-100(src='images/carousel-2.jpg' style='object-fit: cover;')
-              .carousel-caption.d-flex.flex-column.align-items-center.justify-content-center
-                .p-3(style='max-width: 700px;')
-                  h1.display-4.text-white.mb-3.animate__animated.animate__fadeInDown Women Fashion
-                  p.mx-md-5.px-5.animate__animated.animate__bounceIn
-                    | Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam
-                  a.btn.btn-outline-light.py-2.px-4.mt-3.animate__animated.animate__fadeInUp(href='#') Shop Now
-            .carousel-item.position-relative(style='height: 430px;')
-              img.position-absolute.w-100.h-100(src='images/carousel-3.jpg' style='object-fit: cover;')
-              .carousel-caption.d-flex.flex-column.align-items-center.justify-content-center
-                .p-3(style='max-width: 700px;')
-                  h1.display-4.text-white.mb-3.animate__animated.animate__fadeInDown Kids Fashion
-                  p.mx-md-5.px-5.animate__animated.animate__bounceIn
-                    | Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam
-                  a.btn.btn-outline-light.py-2.px-4.mt-3.animate__animated.animate__fadeInUp(href='#') Shop Now
+             each item, index in carosels
+              .carousel-item.position-relative(style='height: 430px;' class=(index === 0 ? 'active' : ''))
+                img.position-absolute.w-100.h-100(src=item.image style='object-fit: cover;')
+                .carousel-caption.d-flex.flex-column.align-items-center.justify-content-center
+                  .p-3(style='max-width: 700px;')
+                    h1.display-4.text-white.mb-3.animate__animated.animate__fadeInDown #{item.title}
+                    p.mx-md-5.px-5.animate__animated.animate__bounceIn
+                      | !{item.description}
+                    a.btn.btn-outline-light.py-2.px-4.mt-3.animate__animated.animate__fadeInUp(href='#') Shop Now
+            
       .col-lg-4
-        .product-offer.mb-30(style='height: 200px;')
-          img.img-fluid(src='images/offer-1.jpg' alt='')
-          .offer-text
-            h6.text-white.text-uppercase Save 20%
-            h3.text-white.mb-3 Special Offer
-            a.btn.btn-primary(href='') Shop Now
-        .product-offer.mb-30(style='height: 200px;')
-          img.img-fluid(src='images/offer-2.jpg' alt='')
-          .offer-text
-            h6.text-white.text-uppercase Save 20%
-            h3.text-white.mb-3 Special Offer
-            a.btn.btn-primary(href='') Shop Now
+        each item in productOffers
+          .product-offer.mb-30(style='height: 200px;')
+            img.img-fluid(src=item.image alt=item.title)
+            .offer-text
+              h6.text-white.text-uppercase(style='margin-bottom: -5px') #{item.title}
+              h3.text-white.mb-3 !{item.description}
+              a.btn.btn-primary(href='') Shop Now
+
   // Carousel End
   //- Khẩu hiệu 
   .container-fluid.pt-5
@@ -70,107 +52,21 @@ block main
           h1.fa.fa-phone-volume.text-primary.m-0.mr-3
           h5.font-weight-semi-bold.m-0 24/7 Support
   //- Hết Khẩu hiệu 
+
   // Categories Start
   .container-fluid.pt-5
     h2.section-title.position-relative.text-uppercase.mx-xl-5.mb-4
-      span.bg-secondary.pr-3 Categories
+      span.bg-secondary.pr-3 Danh mục
     .row.px-xl-5.pb-3
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-1.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-2.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-3.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-4.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-4.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-3.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-2.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-1.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-2.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-1.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-4.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
-      .col-lg-3.col-md-4.col-sm-6.pb-1
-        a.text-decoration-none(href='')
-          .cat-item.img-zoom.d-flex.align-items-center.mb-4
-            .overflow-hidden(style='width: 100px; height: 100px;')
-              img.img-fluid(src='img/cat-3.jpg' alt='')
-            .flex-fill.pl-3
-              h6 Category Name
-              small.text-body 100 Products
+      each category in categories
+        .col-lg-3.col-md-4.col-sm-6.pb-1
+          a.text-decoration-none(href=`/products/${category.slug}`)
+            .cat-item.d-flex.align-items-center.mb-4
+              .overflow-hidden(style='width: 100px; height: 100px;')
+                img.img-fluid(src=category.thumbnail alt=category.title)
+              .flex-fill.pl-3
+                h6 #{category.title}
+                small.text-body #{category.countProduct} Sản phẩm
   // Categories End
 
   //- Sản phẩm nổi bật 
@@ -182,7 +78,7 @@ block main
         .col-lg-3.col-md-4.col-sm-6.pb-1
           .product-item.bg-light.mb-4
             .product-img.position-relative.overflow-hidden
-              img.img-fluid.w-100(src=item.thumbnail, alt=item.title)
+              img.img-fluid.w-100(src=item.thumbnail[0], alt=item.title, style="aspect-ratio: 9/14; object-fit: cover;height=auto")
               .product-action
                 a.btn.btn-outline-dark.btn-square(link=`/cart/addIcon/${item.id}` add-to-cart)
                   i.fa.fa-shopping-cart
@@ -198,35 +94,30 @@ block main
             .text-center.py-4
               a.h6.text-decoration-none.text-truncate(href=`/products/detail/${item.slug}`) #{item.title}
               .d-flex.align-items-center.justify-content-center.mt-2
-                h5(style="color: red") $#{item.priceNew}
-                h6.text-muted.ml-2
-                  del(style="color: green") $#{item.price}
+                h5(style="color: red") #{item.priceNew.toLocaleString()} ₫
+                if(item.discountPercentage != 0)
+                  h6.text-muted.ml-2
+                    del(style="color: green") #{item.price.toLocaleString()} ₫
               .d-flex.align-items-center.justify-content-center.mb-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small (99)
+                each star in [1, 2, 3, 4, 5] 
+                  if (star <= item.ratingAvg)
+                    small.fas.fa-star.text-primary.mr-1
+                  else
+                    small.far.fa-star.text-primary.mr-1
+                small (#{item.reviewsCount})
   //- Hết Sản phẩm nổi bật 
         
   // Offer Start
   .container-fluid.pt-5.pb-3
     .row.px-xl-5
-      .col-md-6
-        .product-offer.mb-30(style='height: 300px;')
-          img.img-fluid(src='images/offer-1.jpg' alt='')
-          .offer-text
-            h6.text-white.text-uppercase Save 20%
-            h3.text-white.mb-3 Special Offer
-            a.btn.btn-primary(href='') Shop Now
-      .col-md-6
-        .product-offer.mb-30(style='height: 300px;')
-          img.img-fluid(src='images/offer-2.jpg' alt='')
-          .offer-text
-            h6.text-white.text-uppercase Save 20%
-            h3.text-white.mb-3 Special Offer
-            a.btn.btn-primary(href='') Shop Now
+      each item in productOffers
+        .col-md-6
+          .product-offer.mb-30(style='height: 300px;')
+            img.img-fluid(src=item.image alt=item.title)
+            .offer-text
+              h5.text-white.text-uppercase(style='margin-bottom: -5px') #{item.title}
+              h3.text-white.mb-3 !{item.description}
+              a.btn.btn-primary(href='') Shop Now
   // Offer End
 
   //- Sản phẩm gần đây
@@ -238,7 +129,7 @@ block main
         .col-lg-3.col-md-4.col-sm-6.pb-1
           .product-item.bg-light.mb-4
             .product-img.position-relative.overflow-hidden
-              img.img-fluid.w-100(src=item.thumbnail, alt=item.title)
+              img.img-fluid.w-100(src=item.thumbnail[0], alt=item.title, style="aspect-ratio: 9/14; object-fit: cover;height=auto")
               .product-action
                 a.btn.btn-outline-dark.btn-square(link=`/cart/addIcon/${item.id}` add-to-cart)
                   i.fa.fa-shopping-cart
@@ -254,18 +145,38 @@ block main
             .text-center.py-4
               a.h6.text-decoration-none.text-truncate(href=`/products/detail/${item.slug}`) #{item.title}
               .d-flex.align-items-center.justify-content-center.mt-2
-                h5(style="color: red") $#{item.priceNew}
-                h6.text-muted.ml-2
-                  del(style="color: green") $#{item.price}
+                h5(style="color: red") #{item.priceNew.toLocaleString()} ₫
+                if(item.discountPercentage != 0)
+                  h6.text-muted.ml-2
+                    del(style="color: green") #{item.price.toLocaleString()} ₫
               .d-flex.align-items-center.justify-content-center.mb-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small.fa.fa-star.text-primary.mr-1
-                small (99)
+                each star in [1, 2, 3, 4, 5] 
+                  if (star <= item.ratingAvg)
+                    small.fas.fa-star.text-primary.mr-1
+                  else
+                    small.far.fa-star.text-primary.mr-1
+                small (#{item.reviewsCount})
       
   //- Hết Sản phẩm gần đây
+
+  //- Bài viết gần đây
+  .container-fluid.pt-5.pb-3
+    h2.section-title.position-relative.text-uppercase.mx-xl-5.mb-4
+      span.bg-secondary.pr-3 Bài viết gần đây
+    .row.px-xl-5
+      each item in blogsNew
+        .col-lg-3.col-md-4.col-sm-6.pb-1
+          .product-item.bg-light.mb-4
+            .product-img.position-relative.overflow-hidden
+              img.img-fluid.w-100(src=item.thumbnail, alt=item.title style="aspect-ratio: 4/3; object-fit: cover; width=80px;height=auto")
+              .product-action          
+                a.btn.btn-outline-dark.btn-square(href=`/blogs/detail/${item.slug}`)
+                  i.fa.fa-search
+            .text-center.py-4
+              a.h6.text-decoration-none.text-truncate(href=`/blogs/detail/${item.slug}` style="margin: 10px; display: block; white-space: normal; overflow: hidden; text-overflow: ellipsis;") #{item.title}
+      
+  //- Hết Bài viết gần đây
+
   // Vendor Start
   .container-fluid.py-5
     .row.px-xl-5

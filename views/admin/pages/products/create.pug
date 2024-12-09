@@ -62,23 +62,14 @@ block main
       
       // Size
       div(class="form-group")
-        label Size:
+        label Kích cỡ:
         div(class="form-check form-check-inline" style="margin-left: 10px")
-          input(
-            type="checkbox"
-            class="form-check-input"
-            id="sizeXS"
-            name="size[]"
-            value="xs"
-          )
-          label(for="sizeXS" class="form-check-label") XS
-        div(class="form-check form-check-inline")
           input(
             type="checkbox"
             class="form-check-input"
             id="sizeS"
             name="size[]"
-            value="s"
+            value="S"
           )
           label(for="sizeS" class="form-check-label") S
         div(class="form-check form-check-inline")
@@ -87,7 +78,7 @@ block main
             class="form-check-input"
             id="sizeM"
             name="size[]"
-            value="m"
+            value="M"
           )
           label(for="sizeM" class="form-check-label") M
         div(class="form-check form-check-inline")
@@ -96,7 +87,7 @@ block main
             class="form-check-input"
             id="sizeL"
             name="size[]"
-            value="l"
+            value="L"
           )
           label(for="sizeL" class="form-check-label") L
         div(class="form-check form-check-inline")
@@ -105,7 +96,7 @@ block main
             class="form-check-input"
             id="sizeXL"
             name="size[]"
-            value="xl"
+            value="XL"
           )
           label(for="sizeXL" class="form-check-label") XL
       // End Size
@@ -144,7 +135,7 @@ block main
         class="form-group"
         upload-image
       )
-        label(for="thumbnail") Ảnh
+        label(for="thumbnail") Chọn nhiều ảnh
         input(
           type="file"
           class="form-control-file"
@@ -152,12 +143,12 @@ block main
           name="thumbnail"
           accept="image/*"
           upload-image-input
+          multiple
         )
-        img(
-          src=""
-          class="image-preview"
-          upload-image-preview
+        div(
+          class="image-preview-container"
         )
+
       div(class="form-group")
         label(for="position") Vị trí
         input(

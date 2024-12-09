@@ -5,7 +5,7 @@ block main
     h1(class="mb-4") #{product.title}
 
   if (product.price)
-    div(class="mb-4") Giá: <b>#{product.price}$</b>
+    div(class="mb-4") Giá: <b>#{product.price.toLocaleString()} ₫</b>
 
   if (product.discountPercentage)
     div(class="mb-4") Giảm giá: <b>#{product.discountPercentage}%</b>
@@ -19,7 +19,7 @@ block main
   if (product.thumbnail)
     div(class="mb-4")
       img(
-        src=product.thumbnail
+        src=product.image
         style="width: 100px"
       )
 

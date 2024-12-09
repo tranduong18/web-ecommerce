@@ -20,10 +20,30 @@ block main
     div(class="mb-4") Trạng thái: <b> #{order.status} </b>
       
   if(order.totalPrice)
-    div(class="mb-4") Tổng tiền: <b> #{order.totalPrice}$ </b>
+    div(class="mb-4") Tổng tiền: <b> #{order.totalPrice.toLocaleString()} ₫ </b>
 
   h5(class="mb-4") Thông tin sản phẩm
   if(order.products)
-    each item in order.products
-      div(class="mb-4") Tên sản phẩm: <b>#{item.title}</b>
-      div(class="mb-4") Số lượng: <b>#{item.quantity}</b>
+    div(style="max-width: 1000px; overflow-x: auto;")
+      table.table.table-hover.table-sm
+        thead
+          tr
+            th STT
+            th Tên sản phẩm
+            th Ảnh
+            th Số lượng
+
+        tbody
+          each item, index in order.products
+            tr 
+              td #{index+1}
+              td #{item.title}
+              td
+                img(
+                    src=item.image
+                    alt=item.title
+                    width="80px"
+                    height="auto"
+                )
+              td #{item.quantity}
+            

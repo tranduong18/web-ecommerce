@@ -61,6 +61,52 @@ block main
           rows="5"
           textarea-mce
         ) #{product.description}
+
+      // Size
+      div(class="form-group")
+        label Kích cỡ:
+        div(class="form-check form-check-inline" style="margin-left: 10px")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeS"
+            name="size[]"
+            value="S"
+            checked=(product.size.includes("S"))
+          )
+          label(for="sizeS" class="form-check-label") S
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeM"
+            name="size[]"
+            value="M"
+            checked=(product.size.includes("M"))
+          )
+          label(for="sizeM" class="form-check-label") M
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeL"
+            name="size[]"
+            value="L"
+            checked=(product.size.includes("L"))
+          )
+          label(for="sizeL" class="form-check-label") L
+        div(class="form-check form-check-inline")
+          input(
+            type="checkbox"
+            class="form-check-input"
+            id="sizeXL"
+            name="size[]"
+            value="XL"
+            checked=(product.size.includes("XL"))
+          )
+          label(for="sizeXL" class="form-check-label") XL
+      // End Size
+
       div(class="form-group")
         label(for="price") Giá
         input(
@@ -95,7 +141,7 @@ block main
         class="form-group"
         upload-image
       )
-        label(for="thumbnail") Ảnh
+        label(for="thumbnail") Chọn nhiều ảnh
         input(
           type="file"
           class="form-control-file"
@@ -103,12 +149,20 @@ block main
           name="thumbnail"
           accept="image/*"
           upload-image-input
+          multiple
         )
-        img(
-          src=product.thumbnail
-          class="image-preview"
-          upload-image-preview
+        div(
+          class="image-preview-container"
         )
+          if(product.thumbnail)
+            each item in product.thumbnail
+              img(
+                src=item
+                class="image-preview"
+                upload-image-preview
+                style="margin-right: 10px"
+              )
+
       div(class="form-group")
         label(for="position") Vị trí
         input(
