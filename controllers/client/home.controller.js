@@ -46,7 +46,7 @@ module.exports.index = async (req, res) => {
         status: "active",
         deleted: false
     })
-    .sort({ position : "desc" }).limit(10)
+    .sort({ position : "desc" }).limit(4)
     .select("-description");
 
     for(const item of productsFeatured){
@@ -66,7 +66,7 @@ module.exports.index = async (req, res) => {
         status: "active",
         deleted: false
     })
-    .sort({ position : "desc" }).limit(8)
+    .sort({ position : "desc" }).limit(4)
     .select("-description");
 
     for(const item of productsNew){
@@ -86,7 +86,7 @@ module.exports.index = async (req, res) => {
         status: "active",
         deleted: false
     })
-    .sort({ position : "desc" }).limit(8)
+    .sort({ position : "desc" }).limit(4)
     .select("-description");
 
     for(const item of blogsNew){
